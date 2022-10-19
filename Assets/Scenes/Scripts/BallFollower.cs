@@ -8,13 +8,11 @@ namespace Scenes.Scripts
         [SerializeField] private Ball ball;
 
         // TODO
-        // Pivot for camera
-        // Pivot rotate
         // Pivot follow ball with Lerp
-        // Start is called before the first frame update
 
         void Start()
         {
+            
         }
 
         // Update is called once per frame

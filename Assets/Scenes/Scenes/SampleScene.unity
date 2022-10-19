@@ -362,9 +362,9 @@ GameObject:
   - component: {fileID: 971691891}
   - component: {fileID: 971691897}
   - component: {fileID: 971691896}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ball
-  m_TagString: Untagged
+  m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
