@@ -7,14 +7,6 @@ namespace Scenes.Scripts
         [SerializeField] private Transform pivotTransform;
         [SerializeField] private Ball ball;
 
-        // TODO
-        // Pivot follow ball with Lerp
-
-        void Start()
-        {
-            
-        }
-
         // Update is called once per frame
         void Update()
         {

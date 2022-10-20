@@ -26,11 +26,10 @@ namespace Scenes.Scripts
                 Transform pivotTransform = cameraPivot.transform;
                 
                 pivotTransform.RotateAround(ball.Position, Vector3.up, delta.x * cameraSensitive);
-                
                 pivotTransform.RotateAround(ball.Position, pivotTransform.right, delta.y * cameraSensitive);
 
                 var angle = Vector3.SignedAngle(Vector3.up, cameraTransform.up, cameraTransform.right);
-
+                
                 if (angle < 3)
                     pivotTransform.RotateAround(ball.Position, cameraTransform.right, 3 - angle);
                 else
@@ -38,6 +37,7 @@ namespace Scenes.Scripts
                     if (angle > 65)
                         pivotTransform.RotateAround(ball.Position, cameraTransform.right, 65 - angle);
                 }
+                
             }
 
             _lastMousePosition = Input.mousePosition;
