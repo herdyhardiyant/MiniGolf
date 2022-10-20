@@ -5,8 +5,8 @@ namespace Scenes.Scripts
     public class Ball : MonoBehaviour
     {
         private Rigidbody _rigidbody;
-        [SerializeField] private float forcePower = 100f;
-        [SerializeField] private float maxPullToPushBall = 2f;
+        [SerializeField] private float totalBallPushPower = 10f;
+        [SerializeField] private float maxPullToPushBall = 1f;
         [SerializeField] private new Camera camera;
 
         public Vector3 Position => _rigidbody.position;
@@ -16,41 +16,56 @@ namespace Scenes.Scripts
         private float _pushPower;
         private bool _isBallClicked;
 
+        private Vector3 _ballPosition;
+
         // Start is called before the first frame update
         void Awake()
         {
             _transform = GetComponent<Transform>();
             _rigidbody = GetComponent<Rigidbody>();
             _isBallClicked = false;
-            
+            _ballPosition = _transform.position;
         }
 
         // Update is called once per frame
         void Update()
         {
             var ray = camera.ScreenPointToRay(Input.mousePosition);
-            
+
             RightClickBall(ray);
 
             if (_isBallClicked)
             {
-                if (!Physics.Raycast(ray, out var mouseHit))
-                {
-                    _isBallClicked = false;
-                }
-
-                var ballPosition = _transform.position;
-                
-                _aimDirection = GetAimDirection(ballPosition, mouseHit);
-                
-                //TODO Click on ball and drag it to move it
-                // Get the distance from the ball to the mouse position
-                var ballToMouseDistance = ballPosition - mouseHit.point;
-                _pushPower = (ballToMouseDistance / maxPullToPushBall).magnitude * forcePower;
+                DragMouseForBallMovement(ray);
             }
 
             ReleaseClickBall();
+        }
 
+        private void DragMouseForBallMovement(Ray ray)
+        {
+            if (!Physics.Raycast(ray, out var mouseHit))
+            {
+                _isBallClicked = false;
+            }
+            else
+            {
+                _ballPosition = _transform.position;
+                _aimDirection = GetAimDirection(mouseHit);
+                _pushPower = GetPushPower(mouseHit);
+            }
+        }
+
+        private float GetPushPower(RaycastHit mouseHit)
+        {
+            var ballToMouseDistance = _ballPosition - mouseHit.point;
+            var pushPowerFactor = ballToMouseDistance.magnitude / maxPullToPushBall;
+            var pushPower = pushPowerFactor * totalBallPushPower;
+
+            if (pushPower > totalBallPushPower)
+                pushPower = totalBallPushPower;
+
+            return pushPower;
         }
 
         private void ReleaseClickBall()
@@ -67,22 +82,17 @@ namespace Scenes.Scripts
 
         private void RightClickBall(Ray ray)
         {
-            if (Input.GetMouseButton(1))
-            {
-                if (Physics.Raycast(ray, out var hit))
-                {
-                    if (hit.collider.gameObject.CompareTag("Ball"))
-                    {
-                        _isBallClicked = true;
-                    }
-                }
-            }
+            if (!Input.GetMouseButton(1)) return;
+            if (!Physics.Raycast(ray, out var hit)) return;
+            if (!hit.collider.gameObject.CompareTag("Ball")) return;
+
+            _isBallClicked = true;
         }
 
-        private static Vector3 GetAimDirection(Vector3 ballPosition, RaycastHit mouseHit)
+        private Vector3 GetAimDirection(RaycastHit mouseHit)
         {
             // Direction from ball to hit point
-            var direction = ballPosition - mouseHit.point;
+            var direction = _ballPosition - mouseHit.point;
             direction = Vector3.Normalize(direction);
 
             // horizontal direction
