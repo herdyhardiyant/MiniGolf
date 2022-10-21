@@ -8,7 +8,7 @@ namespace Scenes.Scripts
         [SerializeField] private float cameraSensitive = 1f;
         [SerializeField] private new Camera camera;
         Vector3 _lastMousePosition;
-        [SerializeField] private Ball ball;
+        [SerializeField] private BallController ballController;
 
         // Start is called before the first frame update
         void Start()
@@ -25,17 +25,17 @@ namespace Scenes.Scripts
                 Transform cameraTransform = camera.transform;
                 Transform pivotTransform = cameraPivot.transform;
                 
-                pivotTransform.RotateAround(ball.Position, Vector3.up, delta.x * cameraSensitive);
-                pivotTransform.RotateAround(ball.Position, pivotTransform.right, delta.y * cameraSensitive);
+                pivotTransform.RotateAround(ballController.Position, Vector3.up, delta.x * cameraSensitive);
+                pivotTransform.RotateAround(ballController.Position, pivotTransform.right, delta.y * cameraSensitive);
 
                 var angle = Vector3.SignedAngle(Vector3.up, cameraTransform.up, cameraTransform.right);
                 
                 if (angle < 3)
-                    pivotTransform.RotateAround(ball.Position, cameraTransform.right, 3 - angle);
+                    pivotTransform.RotateAround(ballController.Position, cameraTransform.right, 3 - angle);
                 else
                 {
                     if (angle > 65)
-                        pivotTransform.RotateAround(ball.Position, cameraTransform.right, 65 - angle);
+                        pivotTransform.RotateAround(ballController.Position, cameraTransform.right, 65 - angle);
                 }
                 
             }
