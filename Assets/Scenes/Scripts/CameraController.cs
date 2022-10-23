@@ -9,13 +9,7 @@ namespace Scenes.Scripts
         [SerializeField] private new Camera camera;
         Vector3 _lastMousePosition;
         [SerializeField] private BallController ballController;
-
-        // Start is called before the first frame update
-        void Start()
-        {
         
-        }
-
         // Update is called once per frame
         void Update()
         {

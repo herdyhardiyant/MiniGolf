@@ -33,7 +33,7 @@ namespace Scenes.Scripts
         {
             var ray = camera.ScreenPointToRay(Input.mousePosition);
 
-            RightClickBall(ray);
+            ClickBall(ray);
 
             if (_isBallClicked)
             {
@@ -56,7 +56,7 @@ namespace Scenes.Scripts
 
         private void DragMouseForBallMovement(Ray ray)
         {
-            if (!Physics.Raycast(ray, out var mouseHit))
+            if (!Physics.Raycast(ray, out var mouseHit,LayerMask.NameToLayer("Ray")))
             {
                 _isBallClicked = false;
             }
@@ -92,10 +92,10 @@ namespace Scenes.Scripts
             }
         }
 
-        private void RightClickBall(Ray ray)
+        private void ClickBall(Ray ray)
         {
             if (!Input.GetMouseButton(1)) return;
-            if (!Physics.Raycast(ray, out var hit)) return;
+            if (!Physics.Raycast( ray, out var hit)) return;
             if (!hit.collider.gameObject.CompareTag("Ball")) return;
 
             _isBallClicked = true;
@@ -103,7 +103,6 @@ namespace Scenes.Scripts
 
         private Vector3 GetAimDirection(RaycastHit mouseHit)
         {
-            // Direction from ball to hit point
             var direction = _ballPosition - mouseHit.point;
             direction = Vector3.Normalize(direction);
 
