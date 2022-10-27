@@ -1,6 +1,7 @@
+using Managers;
 using UnityEngine;
 
-namespace Scenes.Scripts
+namespace Gameplay
 {
     public class BallController : MonoBehaviour
     {
@@ -8,7 +9,9 @@ namespace Scenes.Scripts
         [SerializeField] private float totalBallPushPower = 10f;
         [SerializeField] private float maxPullToPushBall = 1f;
         [SerializeField] private new Camera camera;
-
+        [SerializeField] private GameManager gameManager;
+        
+        
         public Vector3 Position => _rigidbody.position;
         public bool IsMoving => _rigidbody.velocity.magnitude > 0.1f;
 
@@ -82,13 +85,12 @@ namespace Scenes.Scripts
 
         private void ReleaseClickBall()
         {
-            if (Input.GetMouseButtonUp(1))
+            if (!Input.GetMouseButtonUp(1)) return;
+            if (_isBallClicked)
             {
-                if (_isBallClicked)
-                {
-                    _isBallClicked = false;
-                    _rigidbody.AddForce(_aimDirection * _pushPower, ForceMode.Impulse);
-                }
+                _isBallClicked = false;
+                _rigidbody.AddForce(_aimDirection * _pushPower, ForceMode.Impulse);
+                gameManager.IncrementShotAttempts();
             }
         }
 

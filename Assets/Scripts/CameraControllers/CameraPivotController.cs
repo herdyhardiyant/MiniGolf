@@ -1,6 +1,7 @@
+using Gameplay;
 using UnityEngine;
 
-namespace Scenes.Scripts
+namespace CameraControllers
 {
     public class CameraPivotController : MonoBehaviour
     {

@@ -1,11 +1,12 @@
 using UnityEngine;
 
-namespace Scenes.Scripts
+namespace Managers
 {
-    public class SceneLoadManager : MonoBehaviour
+    public class UIManager : MonoBehaviour
     {
         
-        // TODO Load main menu, loading, and levels
+        //TODO Handle which ui is active
+        
         // Start is called before the first frame update
         void Start()
         {

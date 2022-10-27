@@ -1,12 +1,11 @@
 using UnityEngine;
 
-namespace Scenes.Scripts
+namespace Managers
 {
-    public class GameManager : MonoBehaviour
+    public class SceneLoadManager : MonoBehaviour
     {
-
-        // TODO Count shot attempts
         
+        // TODO Load main menu, loading, and levels
         // Start is called before the first frame update
         void Start()
         {
