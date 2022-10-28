@@ -14,6 +14,12 @@ namespace Gameplay
         
         public Vector3 Position => _rigidbody.position;
         public bool IsMoving => _rigidbody.velocity.magnitude > 0.1f;
+        public bool IsAiming => _isAiming;
+        public Vector3 AimDirection => _aimDirection;
+        public float PushPower => _pushPower;
+        
+        private bool _isAiming;
+        
 
         private Transform _transform;
         private Vector3 _aimDirection;
@@ -21,17 +27,16 @@ namespace Gameplay
         private bool _isBallClicked;
 
         private Vector3 _ballPosition;
-
-        // Start is called before the first frame update
+        
         void Awake()
         {
+            _isAiming = false;
             _transform = GetComponent<Transform>();
             _rigidbody = GetComponent<Rigidbody>();
             _isBallClicked = false;
             _ballPosition = _transform.position;
         }
-
-        // Update is called once per frame
+        
         void Update()
         {
             var ray = camera.ScreenPointToRay(Input.mousePosition);
@@ -42,16 +47,13 @@ namespace Gameplay
             {
                 DragMouseForBallMovement(ray);
             }
-
             ReleaseClickBall();
-            
             StopBallWhenVelocityIsVerySmall();
-            
         }
 
         private void StopBallWhenVelocityIsVerySmall()
         {
-            if (_rigidbody.velocity.magnitude < 0.1f)
+            if (_rigidbody.velocity.magnitude < 0.01f)
             {
                 _rigidbody.velocity = Vector3.zero;
             }
@@ -59,12 +61,20 @@ namespace Gameplay
 
         private void DragMouseForBallMovement(Ray ray)
         {
-            if (!Physics.Raycast(ray, out var mouseHit,LayerMask.NameToLayer("Ray")))
+            if (!Physics.Raycast(ray, out var mouseHit, 1000))
             {
                 _isBallClicked = false;
+                _isAiming = false;
+
             }
             else
             {
+                _isAiming = true;
+               
+                //Draw ray for debug
+                Debug.DrawRay(ray.origin, ray.direction * 100, Color.yellow);
+                
+                print(mouseHit.collider.name);
                 _ballPosition = _transform.position;
                 _aimDirection = GetAimDirection(mouseHit);
                 _pushPower = GetPushPower(mouseHit);
@@ -80,17 +90,21 @@ namespace Gameplay
             if (pushPower > totalBallPushPower)
                 pushPower = totalBallPushPower;
 
+            print(pushPower);
             return pushPower;
         }
 
         private void ReleaseClickBall()
         {
             if (!Input.GetMouseButtonUp(1)) return;
+            
             if (_isBallClicked)
             {
                 _isBallClicked = false;
                 _rigidbody.AddForce(_aimDirection * _pushPower, ForceMode.Impulse);
                 gameManager.IncrementShotAttempts();
+                _isAiming = false;
+
             }
         }
 
@@ -99,7 +113,6 @@ namespace Gameplay
             if (!Input.GetMouseButton(1)) return;
             if (!Physics.Raycast( ray, out var hit)) return;
             if (!hit.collider.gameObject.CompareTag("Ball")) return;
-
             _isBallClicked = true;
         }
 
