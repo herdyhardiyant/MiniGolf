@@ -23,7 +23,7 @@ namespace Gameplay
             if (ballController.IsAiming)
             {
                 arrowPivot.forward = ballController.AimDirection;
-                arrow.transform.localScale = new Vector3(1,1,ballController.PushPower / 10);
+                arrow.transform.localScale = new Vector3(1,1,ballController.PushPower / ballController.MaxPushPower);
             }
            
             arrow.SetActive(ballController.IsAiming);

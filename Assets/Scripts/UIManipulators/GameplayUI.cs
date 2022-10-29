@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace UIManipulators
 {
-    public class GameUIManipulator : MonoBehaviour
+    public class GameplayUI : MonoBehaviour
     {
         [SerializeField] private TMP_Text attemptsText;
         [SerializeField] private GameManager gameManager;

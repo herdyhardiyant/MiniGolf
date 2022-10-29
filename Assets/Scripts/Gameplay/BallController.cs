@@ -6,7 +6,7 @@ namespace Gameplay
     public class BallController : MonoBehaviour
     {
         private Rigidbody _rigidbody;
-        [SerializeField] private float totalBallPushPower = 10f;
+        [SerializeField] private float maxPushPower = 10f;
         [SerializeField] private float maxPullToPushBall = 1f;
         [SerializeField] private new Camera camera;
         [SerializeField] private GameManager gameManager;
@@ -17,17 +17,15 @@ namespace Gameplay
         public bool IsAiming => _isAiming;
         public Vector3 AimDirection => _aimDirection;
         public float PushPower => _pushPower;
-        
-        private bool _isAiming;
-        
+        public float MaxPushPower => maxPushPower;
 
+        private bool _isAiming;
         private Transform _transform;
         private Vector3 _aimDirection;
         private float _pushPower;
         private bool _isBallClicked;
-
         private Vector3 _ballPosition;
-        
+       
         void Awake()
         {
             _isAiming = false;
@@ -63,18 +61,11 @@ namespace Gameplay
         {
             if (!Physics.Raycast(ray, out var mouseHit, 1000))
             {
-                _isBallClicked = false;
-                _isAiming = false;
-
+                MouseStopAimingBall();
             }
             else
             {
                 _isAiming = true;
-               
-                //Draw ray for debug
-                Debug.DrawRay(ray.origin, ray.direction * 100, Color.yellow);
-                
-                print(mouseHit.collider.name);
                 _ballPosition = _transform.position;
                 _aimDirection = GetAimDirection(mouseHit);
                 _pushPower = GetPushPower(mouseHit);
@@ -85,12 +76,11 @@ namespace Gameplay
         {
             var ballToMouseDistance = _ballPosition - mouseHit.point;
             var pushPowerFactor = ballToMouseDistance.magnitude / maxPullToPushBall;
-            var pushPower = pushPowerFactor * totalBallPushPower;
+            var pushPower = pushPowerFactor * maxPushPower;
 
-            if (pushPower > totalBallPushPower)
-                pushPower = totalBallPushPower;
-
-            print(pushPower);
+            if (pushPower > maxPushPower)
+                pushPower = maxPushPower;
+            
             return pushPower;
         }
 
@@ -100,12 +90,17 @@ namespace Gameplay
             
             if (_isBallClicked)
             {
-                _isBallClicked = false;
+                MouseStopAimingBall();
                 _rigidbody.AddForce(_aimDirection * _pushPower, ForceMode.Impulse);
                 gameManager.IncrementShotAttempts();
-                _isAiming = false;
 
             }
+        }
+
+        private void MouseStopAimingBall()
+        {
+            _isAiming = false;
+            _isBallClicked = false;
         }
 
         private void ClickBall(Ray ray)
