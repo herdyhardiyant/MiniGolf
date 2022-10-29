@@ -10,6 +10,7 @@ namespace Gameplay
         [SerializeField] private float maxPullToPushBall = 1f;
         [SerializeField] private new Camera camera;
         [SerializeField] private GameManager gameManager;
+        [SerializeField] private BallSpawnHandler ballSpawnHandler;
         
         
         public Vector3 Position => _rigidbody.position;
@@ -38,7 +39,13 @@ namespace Gameplay
         void Update()
         {
             var ray = camera.ScreenPointToRay(Input.mousePosition);
-
+            
+           
+            if (_rigidbody.velocity.y < -1f)
+            {
+                return;
+            }
+            
             ClickBall(ray);
 
             if (_isBallClicked)
@@ -93,7 +100,7 @@ namespace Gameplay
                 MouseStopAimingBall();
                 _rigidbody.AddForce(_aimDirection * _pushPower, ForceMode.Impulse);
                 gameManager.IncrementShotAttempts();
-
+                ballSpawnHandler.SetSpawnPoint(transform.position);
             }
         }
 
