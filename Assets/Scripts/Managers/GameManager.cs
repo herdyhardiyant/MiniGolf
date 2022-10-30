@@ -9,13 +9,7 @@ namespace Managers
         
 
         private int _shotAttempts;
-
-        // TODO is ball enter the hole
-        // TODO is ball out of bounds
-        // TODO ball respawn position
-        // TODO Count shot attempts
         
-
         public void IncrementShotAttempts()
         {
             _shotAttempts++;
@@ -26,14 +20,6 @@ namespace Managers
             _shotAttempts = 0;
         }
 
-        void Start()
-        {
-        
-        }
-    
-        void Update()
-        {
-        
-        }
+     
     }
 }

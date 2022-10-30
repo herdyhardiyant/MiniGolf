@@ -5,11 +5,10 @@ namespace Gameplay
 {
     public class BallHoleTrigger : MonoBehaviour
     {
-        
         public bool IsBallInHole => _isTriggered;
 
         private bool _isTriggered;
-        
+
 
         private void Awake()
         {
@@ -18,8 +17,11 @@ namespace Gameplay
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Ball"))
+
+            if (other.gameObject.CompareTag("Hole"))
             {
+                print(gameObject.name + " " + other.gameObject.name);
+
                 _isTriggered = true;
             }
         }

@@ -37,7 +37,7 @@ namespace UIManipulators
         {
             UpdateAttemptsText();
             UpdateAttemptsText();
-
+            
             if (ballHoleTrigger.IsBallInHole)
             {
                 ShowFinishPanel();
