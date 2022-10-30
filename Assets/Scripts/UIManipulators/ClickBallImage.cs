@@ -10,11 +10,18 @@ namespace UIManipulators
         [SerializeField] private RawImage aimImage;
         [SerializeField] private Transform ballTransform;
         [SerializeField] private BallController ballController;
-
+        [SerializeField] private BallHoleTrigger ballHoleTrigger;
 
         // Update is called once per frame
         void Update()
         {
+
+            if (ballHoleTrigger.IsBallInHole)
+            {
+                aimImage.enabled = false;
+                return;
+            }
+            
             if (ballController.IsAiming)
             {
                 SetAimBallImagePositionToMouse();
